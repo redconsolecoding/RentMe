@@ -15,9 +15,6 @@ namespace Domain.Entities.Hotels
 
         public int HotelId { get; set; }
 
-        [ForeignKey(nameof(HotelGuest.Hotel))]
-        public ICollection<HotelGuest> HotelGuests { get; set; }
-
         [ForeignKey(nameof(HotelId))]
         public Hotel Hotel { get; set; }
     }

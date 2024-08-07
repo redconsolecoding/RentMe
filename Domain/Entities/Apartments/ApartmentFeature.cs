@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
 using Domain.Entities.Administration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Apartments
 {
+    [PrimaryKey(nameof(ApartmentId), nameof(FeatureId))]
     public class ApartmentFeature : BaseEntity
     {
-        [Key]
         public int ApartmentId { get; set; }
 
-        [Key]
         public int FeatureId { get; set; }
 
         [ForeignKey(nameof(FeatureId))]

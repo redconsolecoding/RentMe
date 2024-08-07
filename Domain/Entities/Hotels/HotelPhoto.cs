@@ -2,18 +2,19 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
 using Domain.Entities.Administration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Hotels
 {
+    [PrimaryKey(nameof(HotelId), nameof(PhotoId))]
     public class HotelPhoto : BaseEntity
     {
-        [Key]
         public int HotelId { get; set; }
 
-        [Key]
         public int PhotoId { get; set; }
 
         [ForeignKey(nameof(PhotoId))]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public Photo Photo { get; set; }
 
         [ForeignKey(nameof(HotelId))]

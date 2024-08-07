@@ -51,5 +51,8 @@ namespace Domain.Entities.Hotels
 
         [InverseProperty(nameof(HotelRoom.Hotel))]
         public ICollection<HotelRoom> HotelRooms { get; set; }
+
+        [InverseProperty(nameof(HotelGuest.Hotel))]
+        public ICollection<HotelGuest> HotelGuests { get; set; }
     }
 }

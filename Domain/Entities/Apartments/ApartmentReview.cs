@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
 using Domain.Entities.Administration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Apartments
 {
+    [PrimaryKey(nameof(ReviewId), nameof(ApartmentId))]
     public class ApartmentReview : BaseEntity
     {
-        [Key]
         public int ReviewId { get; set; }
 
-        [Key]
         public int ApartmentId { get; set; }
 
         [ForeignKey(nameof(ApartmentId))]

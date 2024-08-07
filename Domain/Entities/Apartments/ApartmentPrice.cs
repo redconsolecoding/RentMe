@@ -14,9 +14,6 @@ namespace Domain.Entities.Apartments
 
         public int ApartmentId { get; set; }
 
-        [ForeignKey(nameof(ApartmentGuest.Apartment))]
-        public ICollection<ApartmentGuest> ApartmentGuests { get; set; }
-
         [ForeignKey(nameof(ApartmentId))]
         public Apartment Apartment { get; set; }
     }

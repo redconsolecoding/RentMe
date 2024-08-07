@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
 using Domain.Entities.Catalogs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Hotels
 {
@@ -15,6 +16,7 @@ namespace Domain.Entities.Hotels
         public int RoomNumber { get; set; }
 
         [ForeignKey(nameof(RoomTypeId))]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public RoomType RoomType { get; set; }
 
         [ForeignKey(nameof(HotelId))]

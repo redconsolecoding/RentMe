@@ -1,20 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
-using Domain.Enums;
+using Domain.Entities.Catalogs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Apartments
 {
+    [PrimaryKey(nameof(GuestId), nameof(ApartmentId))]
     public class ApartmentGuest : BaseEntity
     {
-        [Key]
         public int GuestId { get; set; }
 
-        [Key]
         public int ApartmentId { get; set; }
-        public EGuest Guest { get; set; }
+        public int GuestTypeId { get; set; }
+
+        [ForeignKey(nameof(GuestTypeId))]
+        public GuestType Guest { get; set; }
 
         [ForeignKey(nameof(ApartmentId))]
-        public Apartment Apartment { get; set; }
+        public virtual Apartment Apartment { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Application.Models;
 using Domain.Entities.Administration;
 using Domain.Entities.Catalogs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities.Apartments
 {
@@ -38,6 +39,7 @@ namespace Domain.Entities.Apartments
         public int FeatureId { get; set; }
 
         [ForeignKey(nameof(RoomTypeId))]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public virtual RoomType RoomType { get; set; }
 
         [ForeignKey(nameof(PhotoId))]
@@ -47,12 +49,15 @@ namespace Domain.Entities.Apartments
         public ICollection<ApartmentPrice> ApartmentPrices { get; set; }
 
         [InverseProperty(nameof(ApartmentPhoto.Apartment))]
-        public ICollection<ApartmentPhoto> ApartmentPhotos { get; set; }
+        public virtual ICollection<ApartmentPhoto> ApartmentPhotos { get; set; }
 
         [InverseProperty(nameof(ApartmentReview.Apartment))]
         public ICollection<ApartmentReview> ApartmentReviews { get; set; }
 
         [InverseProperty(nameof(ApartmentFeature.Apartment))]
         public ICollection<ApartmentFeature> ApartmentFeatures { get; set; }
+
+        [InverseProperty(nameof(ApartmentGuest.Apartment))]
+        public ICollection<ApartmentGuest> ApartmentGuests { get; set; }
     }
 }
