@@ -15,11 +15,7 @@ namespace Infrastructure
         {
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-                    .EnableSensitiveDataLogging()
-                    .LogTo(Console.WriteLine, LogLevel.Information);
-                ;
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             return services;
         }
