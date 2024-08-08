@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Serilog;
+using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+//Global Error Handling Middleware
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthorization();
 
