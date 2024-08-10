@@ -25,4 +25,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\Apartment\" />
+    <Folder Include="Repositories\Catalog\" />
+    <Folder Include="Repositories\Hotel\" />
+  </ItemGroup>
+
 </Project>

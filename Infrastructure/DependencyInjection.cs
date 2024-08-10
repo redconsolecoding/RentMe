@@ -1,8 +1,9 @@
-﻿using Infrastructure.Context;
+﻿using Application.Interfaces;
+using Application.Repositories;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure
 {
@@ -17,6 +18,9 @@ namespace Infrastructure
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(IRepository<>));
             return services;
         }
     }
