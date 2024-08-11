@@ -1,7 +1,10 @@
 ﻿using System.Reflection;
+using Application.Validation;
+using Application.Validation.Catalog;
 using FluentValidation;
 using Mapster;
 using MapsterMapper;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -17,10 +20,14 @@ namespace Application
 
             services.AddValidatorsFromAssembly(assembly);
 
+            services.AddValidatorsFromAssemblyContaining<CreateGuestTypeRequestValidator>();
+
             var config = TypeAdapterConfig.GlobalSettings;
             config.Scan(Assembly.GetExecutingAssembly());
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
 
             return services;
         }

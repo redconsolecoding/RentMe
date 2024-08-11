@@ -18,6 +18,8 @@ builder.Host.UseSerilog(
 
 var app = builder.Build();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,7 +31,6 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 //Global Error Handling Middleware
-app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthorization();
 

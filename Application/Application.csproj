@@ -21,6 +21,12 @@
     <Folder Include="Repositories\Apartment\" />
     <Folder Include="Repositories\Hotel\" />
     <Folder Include="Repositories\Catalog\" />
+    <Folder Include="Services\Apartment\" />
+    <Folder Include="Services\Catalog\GuestType\Command\Delete\" />
+    <Folder Include="Services\Catalog\GuestType\Command\Update\" />
+    <Folder Include="Services\Catalog\GuestType\Queries\" />
+    <Folder Include="Services\Hotel\" />
+    <Folder Include="Services\Administration\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Error;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.DTOs.Error;
 using Application.Exceptions;
 
 namespace WebApi.Middleware

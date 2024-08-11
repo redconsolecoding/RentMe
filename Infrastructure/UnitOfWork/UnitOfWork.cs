@@ -12,9 +12,9 @@ namespace Infrastructure.UnitOfWork
             _databaseContext = databaseContext;
         }
 
-        public void Commit()
+        public async Task Commit(CancellationToken cancellationToken)
         {
-            _databaseContext.SaveChanges();
+            await _databaseContext.SaveChangesAsync(cancellationToken);
         }
 
         public void Rollback()
