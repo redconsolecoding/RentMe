@@ -1,48 +1,41 @@
 ﻿using MediatR;
 
-namespace Application.Services.Catalog.GuestType.Command.Add
+namespace Application.Services.Catalog.GuestType.Queries.Get
 {
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Exceptions;
-    using Application.Interfaces;
     using Application.Repositories;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, GuestType>
+    public class GetGuestTypesHandler : IRequestHandler<GetGuestTypesQuery, IEnumerable<GuestType>>
     {
         public readonly IRepository<GuestType> _repository;
-        private readonly ILogger<GuestTypeHandler> _logger;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<GetGuestTypesHandler> _logger;
 
-        public GuestTypeHandler(
+        public GetGuestTypesHandler(
             IRepository<GuestType> repository,
-            ILogger<GuestTypeHandler> logger,
-            IUnitOfWork unitOfWork
+            ILogger<GetGuestTypesHandler> logger
         )
         {
             _repository = repository;
             _logger = logger;
-            _unitOfWork = unitOfWork;
         }
 
-        public async Task<GuestType> Handle(
-            CreateGuestTypeRequest request,
+        public async Task<IEnumerable<GuestType>> Handle(
+            GetGuestTypesQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                var guestType = await _repository.AddAsync(request.GuestType);
-                await _unitOfWork.Commit(cancellationToken);
-
-                return guestType;
+                return await _repository.GetAllAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create GuestType @{ex}", ex);
+                _logger.LogError(ex, "Unable to get GuestTypes");
                 throw new RentMeException(
                     ((int)HttpStatusCode.BadRequest),
                     "Unable to create GuestType",

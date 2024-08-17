@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Services.Catalog.GuestType.Command.Add
+namespace Application.Services.Catalog.GuestType.Command.Update
 {
     using System.Net;
     using System.Threading;
@@ -11,41 +11,43 @@ namespace Application.Services.Catalog.GuestType.Command.Add
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, GuestType>
+    public class UpdateGuestTypeHandler : IRequestHandler<UpdateGuestTypeRequest, Unit>
     {
-        public readonly IRepository<GuestType> _repository;
-        private readonly ILogger<GuestTypeHandler> _logger;
+        private readonly IRepository<GuestType> _repository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<UpdateGuestTypeHandler> _logger;
 
-        public GuestTypeHandler(
+        public UpdateGuestTypeHandler(
             IRepository<GuestType> repository,
-            ILogger<GuestTypeHandler> logger,
-            IUnitOfWork unitOfWork
+            IUnitOfWork unitOfWork,
+            ILogger<UpdateGuestTypeHandler> logger
         )
         {
             _repository = repository;
-            _logger = logger;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
-        public async Task<GuestType> Handle(
-            CreateGuestTypeRequest request,
+        public async Task<Unit> Handle(
+            UpdateGuestTypeRequest request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                var guestType = await _repository.AddAsync(request.GuestType);
+                _repository.UpdateAsync(request.GuestType);
+
                 await _unitOfWork.Commit(cancellationToken);
 
-                return guestType;
+                return Unit.Value;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create GuestType @{ex}", ex);
+                _logger.LogError(ex, "Error occured when trying to update Guest Type");
+
                 throw new RentMeException(
                     ((int)HttpStatusCode.BadRequest),
-                    "Unable to create GuestType",
+                    "Unable to update GuestType",
                     ""
                 );
             }

@@ -1,7 +1,7 @@
 ﻿using Application.Services.Catalog.GuestType.Command.Add;
 using FluentValidation;
 
-namespace Application.Validation.Catalog
+namespace Application.Validation.Catalog.GuestType
 {
     public class CreateGuestTypeRequestValidator : AbstractValidator<CreateGuestTypeRequest>
     {

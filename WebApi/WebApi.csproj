@@ -28,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Controllers\Apartment\" />
     <Folder Include="Controllers\Hotel\" />
-    <Folder Include="Controllers\Administration\" />
   </ItemGroup>
 
 </Project>

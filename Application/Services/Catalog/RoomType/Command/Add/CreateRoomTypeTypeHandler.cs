@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Services.Catalog.GuestType.Command.Add
+namespace Application.Services.Catalog.RoomType.Command.Add
 {
     using System.Net;
     using System.Threading;
@@ -11,15 +11,15 @@ namespace Application.Services.Catalog.GuestType.Command.Add
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, GuestType>
+    public class CreateRoomTypeTypeHandler : IRequestHandler<CreateRoomTypeRequest, RoomType>
     {
-        public readonly IRepository<GuestType> _repository;
-        private readonly ILogger<GuestTypeHandler> _logger;
+        public readonly IRepository<RoomType> _repository;
+        private readonly ILogger<CreateRoomTypeTypeHandler> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GuestTypeHandler(
-            IRepository<GuestType> repository,
-            ILogger<GuestTypeHandler> logger,
+        public CreateRoomTypeTypeHandler(
+            IRepository<RoomType> repository,
+            ILogger<CreateRoomTypeTypeHandler> logger,
             IUnitOfWork unitOfWork
         )
         {
@@ -28,24 +28,24 @@ namespace Application.Services.Catalog.GuestType.Command.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GuestType> Handle(
-            CreateGuestTypeRequest request,
+        public async Task<RoomType> Handle(
+            CreateRoomTypeRequest request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                var guestType = await _repository.AddAsync(request.GuestType);
+                var roomType = await _repository.AddAsync(request.RoomType);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return guestType;
+                return roomType;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create GuestType @{ex}", ex);
+                _logger.LogError("Unable to create RoomType @{ex}", ex);
                 throw new RentMeException(
                     ((int)HttpStatusCode.BadRequest),
-                    "Unable to create GuestType",
+                    "Unable to create RoomType",
                     ""
                 );
             }

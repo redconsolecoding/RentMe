@@ -20,8 +20,6 @@ namespace Application
 
             services.AddValidatorsFromAssembly(assembly);
 
-            services.AddValidatorsFromAssemblyContaining<CreateGuestTypeRequestValidator>();
-
             var config = TypeAdapterConfig.GlobalSettings;
             config.Scan(Assembly.GetExecutingAssembly());
             services.AddSingleton(config);

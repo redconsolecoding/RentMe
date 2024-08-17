@@ -6,6 +6,6 @@ namespace Application.Services.Catalog.GuestType.Command.Add
 
     public class CreateGuestTypeRequest : IRequest<GuestType>
     {
-        public required GuestType GuestType { get; set; }
+        public GuestType GuestType { get; set; }
     }
 }

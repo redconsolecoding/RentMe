@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Services.Catalog.GuestType.Command.Add
+namespace Application.Services.Administration.Service.Command.Add
 {
     using System.Net;
     using System.Threading;
@@ -8,18 +8,18 @@ namespace Application.Services.Catalog.GuestType.Command.Add
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
-    using Domain.Entities.Catalogs;
+    using Domain.Entities.Administration;
     using Microsoft.Extensions.Logging;
 
-    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, GuestType>
+    public class CreateServiceHandler : IRequestHandler<CreateServiceRequest, Service>
     {
-        public readonly IRepository<GuestType> _repository;
-        private readonly ILogger<GuestTypeHandler> _logger;
+        public readonly IRepository<Service> _repository;
+        private readonly ILogger<CreateServiceHandler> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GuestTypeHandler(
-            IRepository<GuestType> repository,
-            ILogger<GuestTypeHandler> logger,
+        public CreateServiceHandler(
+            IRepository<Service> repository,
+            ILogger<CreateServiceHandler> logger,
             IUnitOfWork unitOfWork
         )
         {
@@ -28,24 +28,24 @@ namespace Application.Services.Catalog.GuestType.Command.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GuestType> Handle(
-            CreateGuestTypeRequest request,
+        public async Task<Service> Handle(
+            CreateServiceRequest request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                var guestType = await _repository.AddAsync(request.GuestType);
+                var service = await _repository.AddAsync(request.Service);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return guestType;
+                return service;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create GuestType @{ex}", ex);
+                _logger.LogError("Unable to create Service @{ex}", ex);
                 throw new RentMeException(
                     ((int)HttpStatusCode.BadRequest),
-                    "Unable to create GuestType",
+                    "Unable to create Service",
                     ""
                 );
             }

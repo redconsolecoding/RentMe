@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,11 +22,7 @@
     <Folder Include="Repositories\Hotel\" />
     <Folder Include="Repositories\Catalog\" />
     <Folder Include="Services\Apartment\" />
-    <Folder Include="Services\Catalog\GuestType\Command\Delete\" />
-    <Folder Include="Services\Catalog\GuestType\Command\Update\" />
-    <Folder Include="Services\Catalog\GuestType\Queries\" />
     <Folder Include="Services\Hotel\" />
-    <Folder Include="Services\Administration\" />
   </ItemGroup>
 
 </Project>
