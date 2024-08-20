@@ -8,10 +8,11 @@ namespace Application.Services.Catalog.GuestType.Command.Add
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, GuestType>
+    public class GuestTypeHandler : IRequestHandler<CreateGuestTypeRequest, Result<GuestType>>
     {
         public readonly IRepository<GuestType> _repository;
         private readonly ILogger<GuestTypeHandler> _logger;
@@ -28,7 +29,7 @@ namespace Application.Services.Catalog.GuestType.Command.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GuestType> Handle(
+        public async Task<Result<GuestType>> Handle(
             CreateGuestTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -38,7 +39,7 @@ namespace Application.Services.Catalog.GuestType.Command.Add
                 var guestType = await _repository.AddAsync(request.GuestType);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return guestType;
+                return Result<GuestType>.Success(guestType);
             }
             catch (Exception ex)
             {

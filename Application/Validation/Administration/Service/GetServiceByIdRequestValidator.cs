@@ -7,7 +7,7 @@ namespace Application.Validation.Administration.Service
     {
         public GetServiceByIdRequestValidator()
         {
-            RuleFor(p => p.Id).NotEmpty();
+            RuleFor(e => e.Id).NotEmpty();
         }
     }
 }

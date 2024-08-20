@@ -2,10 +2,11 @@
 
 namespace Application.Services.Catalog.RoomType.Command.Delete
 {
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class DeleteRoomTypeRequest : IRequest<Unit>
+    public class DeleteRoomTypeRequest : IRequest<Result>
     {
-        public RoomType RoomType { get; set; }
+        public required RoomType RoomType { get; set; }
     }
 }

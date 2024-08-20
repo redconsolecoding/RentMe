@@ -21,37 +21,67 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPost]
-        public async Task<GuestType> CreateGuestType(GuestType guestType)
+        public async Task<IResult> CreateGuestType(GuestType guestType)
         {
-            return await _mediator.Send(new CreateGuestTypeRequest() { GuestType = guestType });
+            var result = await _mediator.Send(
+                new CreateGuestTypeRequest() { GuestType = guestType }
+            );
+
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.BadRequest();
         }
 
         [HttpPut]
         public async Task<IResult> UpdateGuestType(GuestType guestType)
         {
-            return Results.Ok(
-                await _mediator.Send(new UpdateGuestTypeRequest() { GuestType = guestType })
+            var result = await _mediator.Send(
+                new UpdateGuestTypeRequest() { GuestType = guestType }
             );
+
+            if (result.IsSuccess)
+            {
+                return Results.Ok();
+            }
+            return Results.BadRequest();
         }
 
         [HttpDelete]
         public async Task<IResult> DeleteGuestType(GuestType guestType)
         {
-            return Results.Ok(
-                await _mediator.Send(new DeleteGuestTypeRequest() { GuestType = guestType })
+            var result = await _mediator.Send(
+                new DeleteGuestTypeRequest() { GuestType = guestType }
             );
+            if (result.IsSuccess)
+            {
+                return Results.Ok();
+            }
+            return Results.BadRequest();
         }
 
         [HttpGet]
-        public async Task<IEnumerable<GuestType>> GetGuestTypes()
+        public async Task<IResult> GetGuestTypes()
         {
-            return await _mediator.Send(new GetGuestTypesQuery());
+            var result = await _mediator.Send(new GetGuestTypesQuery());
+
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.BadRequest(result.Error);
         }
 
         [HttpGet(":id")]
-        public async Task<GuestType> GetGuestTypeById([FromQuery] int id)
+        public async Task<IResult> GetGuestTypeById([FromQuery] int id)
         {
-            return await _mediator.Send(new GetGuestTypeByIdQuery() { Id = id });
+            var result = await _mediator.Send(new GetGuestTypeByIdQuery() { Id = id });
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.NotFound(result.Error);
         }
     }
 }

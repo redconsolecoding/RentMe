@@ -7,7 +7,7 @@ namespace Application.Validation.Catalog.RoomType
     {
         public GetRoomTypeByIdQueryValidator()
         {
-            RuleFor(p => p.Id).NotEmpty();
+            RuleFor(e => e.Id).NotEmpty();
         }
     }
 }

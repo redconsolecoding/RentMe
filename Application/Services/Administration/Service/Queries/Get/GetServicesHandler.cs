@@ -8,11 +8,13 @@ namespace Application.Services.Administration.Service.Queries.Get
     using Application.Exceptions;
     using Application.Repositories;
     using Application.Services.Catalog.RoomType.Queries.Get;
+    using Domain.Common;
     using Domain.Entities.Administration;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetServicesHandler : IRequestHandler<GetServicesQuery, IEnumerable<Service>>
+    public class GetServicesHandler
+        : IRequestHandler<GetServicesQuery, Result<IEnumerable<Service>>>
     {
         public readonly IRepository<Service> _repository;
         private readonly ILogger<GetServicesHandler> _logger;
@@ -26,14 +28,15 @@ namespace Application.Services.Administration.Service.Queries.Get
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Service>> Handle(
+        public async Task<Result<IEnumerable<Service>>> Handle(
             GetServicesQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                return await _repository.GetAllAsync();
+                var services = await _repository.GetAllAsync();
+                return Result<IEnumerable<Service>>.Success(services);
             }
             catch (Exception ex)
             {

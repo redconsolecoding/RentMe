@@ -4,7 +4,7 @@
     {
         public Task<IEnumerable<T>> GetAllAsync();
 
-        public Task<T> GetById(int id);
+        public Task<T?> GetById(int id);
 
         public Task<T> AddAsync(T entity);
 

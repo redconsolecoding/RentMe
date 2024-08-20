@@ -7,7 +7,16 @@ namespace Application.Validation.Administration.Service
     {
         public UpdateServiceRequestValidator()
         {
-            RuleFor(p => p.Service).NotEmpty();
+            RuleFor(e => e.Service.Name)
+                .NotEmpty()
+                .WithMessage("Name is required.")
+                .MaximumLength(200)
+                .WithMessage("Maximum length is 200 characters.");
+
+            RuleFor(e => e.Service.Price)
+                .NotEmpty()
+                .WithMessage("Price is required.")
+                .PrecisionScale(5, 2, false);
         }
     }
 }

@@ -8,10 +8,11 @@ namespace Application.Services.Catalog.GuestType.Queries.GetById
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetRoomTypeByIdHandler : IRequestHandler<GetGuestTypeByIdQuery, GuestType>
+    public class GetRoomTypeByIdHandler : IRequestHandler<GetGuestTypeByIdQuery, Result<GuestType>>
     {
         public readonly IRepository<GuestType> _repository;
         private readonly ILogger<GetRoomTypeByIdHandler> _logger;
@@ -25,24 +26,26 @@ namespace Application.Services.Catalog.GuestType.Queries.GetById
             _logger = logger;
         }
 
-        public async Task<GuestType> Handle(
+        public async Task<Result<GuestType>> Handle(
             GetGuestTypeByIdQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                GuestType guestType = await _repository.GetById(request.Id);
+                var guestType = await _repository.GetById(request.Id);
                 if (guestType == null)
                 {
-                    throw new RentMeException(
-                        ((int)HttpStatusCode.NotFound),
-                        "Unable to find GuestType with specified Id",
-                        ""
+                    return Result<GuestType>.Failure(
+                        new Error(
+                            ((int)HttpStatusCode.NotFound),
+                            "Unable to find GuestType with specified Id",
+                            ""
+                        )
                     );
                 }
                 else
-                    return guestType;
+                    return Result<GuestType>.Success(guestType);
             }
             catch (Exception ex)
             {

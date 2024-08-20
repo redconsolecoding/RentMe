@@ -2,10 +2,11 @@
 
 namespace Application.Services.Catalog.GuestType.Command.Add
 {
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class CreateGuestTypeRequest : IRequest<GuestType>
+    public class CreateGuestTypeRequest : IRequest<Result<GuestType>>
     {
-        public GuestType GuestType { get; set; }
+        public required GuestType GuestType { get; set; }
     }
 }

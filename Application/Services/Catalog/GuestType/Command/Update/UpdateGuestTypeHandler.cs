@@ -8,10 +8,11 @@ namespace Application.Services.Catalog.GuestType.Command.Update
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class UpdateGuestTypeHandler : IRequestHandler<UpdateGuestTypeRequest, Unit>
+    public class UpdateGuestTypeHandler : IRequestHandler<UpdateGuestTypeRequest, Result>
     {
         private readonly IRepository<GuestType> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,7 +29,7 @@ namespace Application.Services.Catalog.GuestType.Command.Update
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             UpdateGuestTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -39,7 +40,7 @@ namespace Application.Services.Catalog.GuestType.Command.Update
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

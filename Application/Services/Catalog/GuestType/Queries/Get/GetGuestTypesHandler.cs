@@ -7,10 +7,12 @@ namespace Application.Services.Catalog.GuestType.Queries.Get
     using System.Threading.Tasks;
     using Application.Exceptions;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetGuestTypesHandler : IRequestHandler<GetGuestTypesQuery, IEnumerable<GuestType>>
+    public class GetGuestTypesHandler
+        : IRequestHandler<GetGuestTypesQuery, Result<IEnumerable<GuestType>>>
     {
         public readonly IRepository<GuestType> _repository;
         private readonly ILogger<GetGuestTypesHandler> _logger;
@@ -24,14 +26,16 @@ namespace Application.Services.Catalog.GuestType.Queries.Get
             _logger = logger;
         }
 
-        public async Task<IEnumerable<GuestType>> Handle(
+        public async Task<Result<IEnumerable<GuestType>>> Handle(
             GetGuestTypesQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                return await _repository.GetAllAsync();
+                var guestTypes = await _repository.GetAllAsync();
+
+                return Result<IEnumerable<GuestType>>.Success(guestTypes);
             }
             catch (Exception ex)
             {

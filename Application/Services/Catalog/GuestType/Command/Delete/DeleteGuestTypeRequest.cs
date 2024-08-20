@@ -2,10 +2,11 @@
 
 namespace Application.Services.Catalog.GuestType.Command.Delete
 {
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class DeleteGuestTypeRequest : IRequest<Unit>
+    public class DeleteGuestTypeRequest : IRequest<Result>
     {
-        public GuestType GuestType { get; set; }
+        public required GuestType GuestType { get; set; }
     }
 }

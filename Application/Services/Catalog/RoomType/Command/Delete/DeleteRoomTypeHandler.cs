@@ -7,9 +7,10 @@ namespace Application.Services.Catalog.RoomType.Command.Delete
 {
     using System.Net;
     using Application.Exceptions;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class DeleteRoomTypeHandler : IRequestHandler<DeleteRoomTypeRequest, Unit>
+    public class DeleteRoomTypeHandler : IRequestHandler<DeleteRoomTypeRequest, Result>
     {
         private readonly IRepository<RoomType> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Application.Services.Catalog.RoomType.Command.Delete
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             DeleteRoomTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -37,7 +38,7 @@ namespace Application.Services.Catalog.RoomType.Command.Delete
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

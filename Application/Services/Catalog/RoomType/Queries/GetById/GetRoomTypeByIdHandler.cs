@@ -7,10 +7,11 @@ namespace Application.Services.Catalog.RoomType.Queries.GetById
     using System.Threading.Tasks;
     using Application.Exceptions;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetRoomTypeByIdHandler : IRequestHandler<GetRoomTypeByIdQuery, RoomType>
+    public class GetRoomTypeByIdHandler : IRequestHandler<GetRoomTypeByIdQuery, Result<RoomType>>
     {
         public readonly IRepository<RoomType> _repository;
         private readonly ILogger<GetRoomTypeByIdHandler> _logger;
@@ -24,24 +25,26 @@ namespace Application.Services.Catalog.RoomType.Queries.GetById
             _logger = logger;
         }
 
-        public async Task<RoomType> Handle(
+        public async Task<Result<RoomType>> Handle(
             GetRoomTypeByIdQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                RoomType roomType = await _repository.GetById(request.Id);
+                var roomType = await _repository.GetById(request.Id);
                 if (roomType == null)
                 {
-                    throw new RentMeException(
-                        ((int)HttpStatusCode.NotFound),
-                        "Unable to find Service with specified Id",
-                        ""
+                    return Result<RoomType>.Failure(
+                        new Error(
+                            ((int)HttpStatusCode.NotFound),
+                            "Unable to find Service with specified Id",
+                            ""
+                        )
                     );
                 }
                 else
-                    return roomType;
+                    return Result<RoomType>.Success(roomType);
             }
             catch (Exception ex)
             {

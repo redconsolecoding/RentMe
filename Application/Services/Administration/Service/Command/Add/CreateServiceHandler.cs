@@ -8,10 +8,11 @@ namespace Application.Services.Administration.Service.Command.Add
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Administration;
     using Microsoft.Extensions.Logging;
 
-    public class CreateServiceHandler : IRequestHandler<CreateServiceRequest, Service>
+    public class CreateServiceHandler : IRequestHandler<CreateServiceRequest, Result<Service>>
     {
         public readonly IRepository<Service> _repository;
         private readonly ILogger<CreateServiceHandler> _logger;
@@ -28,7 +29,7 @@ namespace Application.Services.Administration.Service.Command.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Service> Handle(
+        public async Task<Result<Service>> Handle(
             CreateServiceRequest request,
             CancellationToken cancellationToken
         )
@@ -38,7 +39,7 @@ namespace Application.Services.Administration.Service.Command.Add
                 var service = await _repository.AddAsync(request.Service);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return service;
+                return Result<Service>.Success(service);
             }
             catch (Exception ex)
             {

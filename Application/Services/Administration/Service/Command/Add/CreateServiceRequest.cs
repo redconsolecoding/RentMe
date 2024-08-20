@@ -2,10 +2,11 @@
 
 namespace Application.Services.Administration.Service.Command.Add
 {
+    using Domain.Common;
     using Domain.Entities.Administration;
 
-    public class CreateServiceRequest : IRequest<Service>
+    public class CreateServiceRequest : IRequest<Result<Service>>
     {
-        public Service Service { get; set; }
+        public required Service Service { get; set; }
     }
 }

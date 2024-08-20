@@ -7,9 +7,10 @@ namespace Application.Services.Administration.Service.Command.Update
 {
     using System.Net;
     using Application.Exceptions;
+    using Domain.Common;
     using Domain.Entities.Administration;
 
-    public class UpdateServiceHandler : IRequestHandler<UpdateServiceRequest, Unit>
+    public class UpdateServiceHandler : IRequestHandler<UpdateServiceRequest, Result>
     {
         private readonly IRepository<Service> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Application.Services.Administration.Service.Command.Update
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             UpdateServiceRequest request,
             CancellationToken cancellationToken
         )
@@ -37,7 +38,7 @@ namespace Application.Services.Administration.Service.Command.Update
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

@@ -7,10 +7,12 @@ namespace Application.Services.Catalog.RoomType.Queries.Get
     using System.Threading.Tasks;
     using Application.Exceptions;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetRoomTypesHandler : IRequestHandler<GetRoomTypesQuery, IEnumerable<RoomType>>
+    public class GetRoomTypesHandler
+        : IRequestHandler<GetRoomTypesQuery, Result<IEnumerable<RoomType>>>
     {
         public readonly IRepository<RoomType> _repository;
         private readonly ILogger<GetRoomTypesHandler> _logger;
@@ -24,14 +26,15 @@ namespace Application.Services.Catalog.RoomType.Queries.Get
             _logger = logger;
         }
 
-        public async Task<IEnumerable<RoomType>> Handle(
+        public async Task<Result<IEnumerable<RoomType>>> Handle(
             GetRoomTypesQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                return await _repository.GetAllAsync();
+                var roomTypes = await _repository.GetAllAsync();
+                return Result<IEnumerable<RoomType>>.Success(roomTypes);
             }
             catch (Exception ex)
             {

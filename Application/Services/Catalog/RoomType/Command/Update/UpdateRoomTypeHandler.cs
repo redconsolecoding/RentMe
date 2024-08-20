@@ -7,9 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Catalog.RoomType.Command.Update
 {
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class UpdateRoomTypeHandler : IRequestHandler<UpdateRoomTypeRequest, Unit>
+    public class UpdateRoomTypeHandler : IRequestHandler<UpdateRoomTypeRequest, Result>
     {
         private readonly IRepository<RoomType> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Application.Services.Catalog.RoomType.Command.Update
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             UpdateRoomTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -37,7 +38,7 @@ namespace Application.Services.Catalog.RoomType.Command.Update
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

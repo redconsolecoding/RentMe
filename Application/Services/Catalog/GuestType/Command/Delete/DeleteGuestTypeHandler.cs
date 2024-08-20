@@ -7,9 +7,10 @@ namespace Application.Services.Catalog.GuestType.Command.Delete
 {
     using System.Net;
     using Application.Exceptions;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class DeleteGuestTypeHandler : IRequestHandler<DeleteGuestTypeRequest, Unit>
+    public class DeleteGuestTypeHandler : IRequestHandler<DeleteGuestTypeRequest, Result>
     {
         private readonly IRepository<GuestType> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Application.Services.Catalog.GuestType.Command.Delete
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             DeleteGuestTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -37,7 +38,7 @@ namespace Application.Services.Catalog.GuestType.Command.Delete
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

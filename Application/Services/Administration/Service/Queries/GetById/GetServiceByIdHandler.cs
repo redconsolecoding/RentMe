@@ -7,11 +7,12 @@ namespace Application.Services.Administration.Service.Queries.GetById
     using System.Threading.Tasks;
     using Application.Exceptions;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Administration;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdQuery, Service>
+    public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdQuery, Result<Service>>
     {
         public readonly IRepository<Service> _repository;
         private readonly ILogger<GetServiceByIdHandler> _logger;
@@ -25,24 +26,26 @@ namespace Application.Services.Administration.Service.Queries.GetById
             _logger = logger;
         }
 
-        public async Task<Service> Handle(
+        public async Task<Result<Service>> Handle(
             GetServiceByIdQuery request,
             CancellationToken cancellationToken
         )
         {
             try
             {
-                Service service = await _repository.GetById(request.Id);
+                var service = await _repository.GetById(request.Id);
                 if (service == null)
                 {
-                    throw new RentMeException(
-                        ((int)HttpStatusCode.NotFound),
-                        "Unable to find Service with specified Id",
-                        ""
+                    return Result<Service>.Failure(
+                        new Error(
+                            ((int)HttpStatusCode.NotFound),
+                            "Unable to find Service with specified Id",
+                            ""
+                        )
                     );
                 }
                 else
-                    return service;
+                    return Result<Service>.Success(service);
             }
             catch (Exception ex)
             {

@@ -19,37 +19,58 @@ namespace WebApi.Controllers.Administration
         }
 
         [HttpPost]
-        public async Task<Service> CreateService(Service service)
+        public async Task<IResult> CreateService(Service service)
         {
-            return await _mediator.Send(new CreateServiceRequest() { Service = service });
+            var result = await _mediator.Send(new CreateServiceRequest() { Service = service });
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.BadRequest();
         }
 
         [HttpPut]
         public async Task<IResult> UpdateService(Service service)
         {
-            return Results.Ok(
-                await _mediator.Send(new UpdateServiceRequest() { Service = service })
-            );
+            var result = await _mediator.Send(new UpdateServiceRequest() { Service = service });
+            if (result.IsSuccess)
+            {
+                return Results.Ok();
+            }
+            return Results.BadRequest();
         }
 
         [HttpDelete]
         public async Task<IResult> DeleteService(Service service)
         {
-            return Results.Ok(
-                await _mediator.Send(new DeleteServiceRequest() { Service = service })
-            );
+            var result = await _mediator.Send(new DeleteServiceRequest() { Service = service });
+            if (result.IsSuccess)
+            {
+                return Results.Ok();
+            }
+            return Results.BadRequest();
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Service>> GetServices()
+        public async Task<IResult> GetServices()
         {
-            return await _mediator.Send(new GetServicesQuery());
+            var result = await _mediator.Send(new GetServicesQuery());
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.BadRequest();
         }
 
         [HttpGet(":id")]
-        public async Task<Service> GetServiceById([FromQuery] int id)
+        public async Task<IResult> GetServiceById([FromQuery] int id)
         {
-            return await _mediator.Send(new GetServiceByIdQuery() { Id = id });
+            var result = await _mediator.Send(new GetServiceByIdQuery() { Id = id });
+            if (result.IsSuccess)
+            {
+                return Results.Ok(result.Value);
+            }
+            return Results.BadRequest(result.Error);
         }
     }
 }

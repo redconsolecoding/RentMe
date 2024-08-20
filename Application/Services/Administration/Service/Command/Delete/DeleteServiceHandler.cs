@@ -7,9 +7,10 @@ namespace Application.Services.Administration.Service.Command.Delete
 {
     using System.Net;
     using Application.Exceptions;
+    using Domain.Common;
     using Domain.Entities.Administration;
 
-    public class DeleteServiceHandler : IRequestHandler<DeleteServiceRequest, Unit>
+    public class DeleteServiceHandler : IRequestHandler<DeleteServiceRequest, Result>
     {
         private readonly IRepository<Service> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Application.Services.Administration.Service.Command.Delete
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(
+        public async Task<Result> Handle(
             DeleteServiceRequest request,
             CancellationToken cancellationToken
         )
@@ -37,7 +38,7 @@ namespace Application.Services.Administration.Service.Command.Delete
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return Unit.Value;
+                return Result.Success();
             }
             catch (Exception ex)
             {

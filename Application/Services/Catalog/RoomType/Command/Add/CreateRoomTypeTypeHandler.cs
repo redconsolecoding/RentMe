@@ -8,10 +8,12 @@ namespace Application.Services.Catalog.RoomType.Command.Add
     using Application.Exceptions;
     using Application.Interfaces;
     using Application.Repositories;
+    using Domain.Common;
     using Domain.Entities.Catalogs;
     using Microsoft.Extensions.Logging;
 
-    public class CreateRoomTypeTypeHandler : IRequestHandler<CreateRoomTypeRequest, RoomType>
+    public class CreateRoomTypeTypeHandler
+        : IRequestHandler<CreateRoomTypeRequest, Result<RoomType>>
     {
         public readonly IRepository<RoomType> _repository;
         private readonly ILogger<CreateRoomTypeTypeHandler> _logger;
@@ -28,7 +30,7 @@ namespace Application.Services.Catalog.RoomType.Command.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RoomType> Handle(
+        public async Task<Result<RoomType>> Handle(
             CreateRoomTypeRequest request,
             CancellationToken cancellationToken
         )
@@ -38,7 +40,7 @@ namespace Application.Services.Catalog.RoomType.Command.Add
                 var roomType = await _repository.AddAsync(request.RoomType);
                 await _unitOfWork.Commit(cancellationToken);
 
-                return roomType;
+                return Result<RoomType>.Success(roomType);
             }
             catch (Exception ex)
             {

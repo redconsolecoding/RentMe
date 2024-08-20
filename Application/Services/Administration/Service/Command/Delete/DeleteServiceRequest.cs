@@ -2,10 +2,11 @@
 
 namespace Application.Services.Administration.Service.Command.Delete
 {
+    using Domain.Common;
     using Domain.Entities.Administration;
 
-    public class DeleteServiceRequest : IRequest<Unit>
+    public class DeleteServiceRequest : IRequest<Result>
     {
-        public Service Service { get; set; }
+        public required Service Service { get; set; }
     }
 }

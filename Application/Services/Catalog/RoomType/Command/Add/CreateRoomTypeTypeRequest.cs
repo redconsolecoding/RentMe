@@ -2,10 +2,11 @@
 
 namespace Application.Services.Catalog.RoomType.Command.Add
 {
+    using Domain.Common;
     using Domain.Entities.Catalogs;
 
-    public class CreateRoomTypeRequest : IRequest<RoomType>
+    public class CreateRoomTypeRequest : IRequest<Result<RoomType>>
     {
-        public RoomType RoomType { get; set; }
+        public required RoomType RoomType { get; set; }
     }
 }
