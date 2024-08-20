@@ -13,9 +13,9 @@ namespace Application.Models
         [Required]
         public string Name { get; set; }
 
-        [StringLength(50)]
-        public string Code { get; set; } = String.Empty;
+        [StringLength(20)]
+        public string Code { get; set; }
 
-        public string Description { get; set; } = String.Empty;
+        public string Description { get; set; }
     }
 }
