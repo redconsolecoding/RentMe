@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Application.DTOs.Error;
-using Application.Exceptions;
+﻿using Application.Exceptions;
+using Domain.Common;
 
 namespace WebApi.Middleware
 {
@@ -35,7 +34,7 @@ namespace WebApi.Middleware
                 {
                     _logger.LogError("An unhandled exception occcured @{exception}", exception);
 
-                    var errorDetails = new ErrorDto(
+                    var errorDetails = new Error(
                         StatusCodes.Status500InternalServerError,
                         "Server Error",
                         ""

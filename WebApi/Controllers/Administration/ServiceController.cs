@@ -5,10 +5,13 @@ using Application.Services.Administration.Service.Queries.Get;
 using Application.Services.Administration.Service.Queries.GetById;
 using Domain.Entities.Administration;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.Administration
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ServiceController : ControllerBase
     {
         private readonly IMediator _mediator;

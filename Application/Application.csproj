@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Repositories\Apartment\" />
     <Folder Include="Repositories\Hotel\" />
     <Folder Include="Repositories\Catalog\" />

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Domain.Entities.Administration;
+﻿using Domain.Entities.Administration;
 using Domain.Entities.Apartments;
 using Domain.Entities.Catalogs;
 using Domain.Entities.Hotels;
@@ -31,6 +30,7 @@ namespace Infrastructure.Context
 
         #region Catalog
         public DbSet<RoomType> RoomTypes { get; set; }
+        public DbSet<GuestType> GuestTypes { get; set; }
 
         #endregion
 
@@ -47,6 +47,16 @@ namespace Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entity.GetTableName();
+                if (tableName != null)
+                {
+                    var newTableName = tableName.Substring(0, tableName.Length - 1);
+                    entity.SetTableName(newTableName);
+                }
+            }
         }
     }
 }

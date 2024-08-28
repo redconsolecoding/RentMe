@@ -5,6 +5,7 @@ using Application.Services.Catalog.GuestType.Queries.Get;
 using Application.Services.Catalog.GuestType.Queries.GetById;
 using Domain.Entities.Catalogs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.Catalog
@@ -21,6 +22,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IResult> CreateGuestType(GuestType guestType)
         {
             var result = await _mediator.Send(
