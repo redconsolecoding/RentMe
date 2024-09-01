@@ -22,6 +22,7 @@ namespace WebApi.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> CreateService(Service service)
         {
             var result = await _mediator.Send(new CreateServiceRequest() { Service = service });
@@ -33,6 +34,7 @@ namespace WebApi.Controllers.Administration
         }
 
         [HttpPut]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> UpdateService(Service service)
         {
             var result = await _mediator.Send(new UpdateServiceRequest() { Service = service });
@@ -44,6 +46,7 @@ namespace WebApi.Controllers.Administration
         }
 
         [HttpDelete]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> DeleteService(Service service)
         {
             var result = await _mediator.Send(new DeleteServiceRequest() { Service = service });

@@ -6,6 +6,7 @@ using Application.Services.Catalog.RoomType.Queries.GetById;
 using Domain.Common;
 using Domain.Entities.Catalogs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.Catalog
@@ -22,6 +23,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> CreateRoomType(RoomType roomType)
         {
             var result = await _mediator.Send(new CreateRoomTypeRequest() { RoomType = roomType });
@@ -33,6 +35,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPut]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> UpdateRoomType(RoomType roomType)
         {
             var result = await _mediator.Send(new UpdateRoomTypeRequest() { RoomType = roomType });
@@ -44,6 +47,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpDelete]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> DeleteRoomType(RoomType roomType)
         {
             var result = await _mediator.Send(new DeleteRoomTypeRequest() { RoomType = roomType });

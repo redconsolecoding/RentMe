@@ -25,7 +25,39 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(
+        "AdminPolicy",
+        policy =>
+        {
+            policy.RequireClaim("user_role", "admin");
+        }
+    );
+    options.AddPolicy(
+        "ModeratorPolicy",
+        policy =>
+        {
+            policy.RequireAssertion(context =>
+                context.User.HasClaim(c =>
+                    c.Type == "user_role" && (c.Value == "admin" || c.Value == "moderator")
+                )
+            );
+        }
+    );
+    options.AddPolicy(
+        "UserPolicy",
+        policy =>
+        {
+            policy.RequireAssertion(context =>
+                context.User.HasClaim(c =>
+                    c.Type == "user_role"
+                    && (c.Value == "admin" || c.Value == "moderator" || c.Value == "user")
+                )
+            );
+        }
+    );
+});
 
 var bytes = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:JwtSecret"]!);
 

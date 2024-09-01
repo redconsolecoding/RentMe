@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using Application.DTOs;
 using Application.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Supabase;
 
 namespace WebApi.Controllers.Administration
@@ -77,6 +79,7 @@ namespace WebApi.Controllers.Administration
         }
 
         [HttpPost("logout")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IResult> Logout()
         {
             try
@@ -89,6 +92,46 @@ namespace WebApi.Controllers.Administration
             {
                 _logger.LogError(ex, "Unable to logout");
                 throw new RentMeException((int)HttpStatusCode.BadRequest, "Unable to logout", "");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IResult> ChangeRole(
+            ChangeRoleRequestDto changeRoleRequest,
+            CancellationToken cancellationToken
+        )
+        {
+            try
+            {
+                if (
+                    (changeRoleRequest.Role != "moderator" && changeRoleRequest.Role != "user")
+                    || !Guid.TryParse(changeRoleRequest.Userid, out _)
+                )
+                {
+                    return Results.BadRequest();
+                }
+
+                var response = await _client
+                    .From<UserRoleDto>()
+                    .Where(x => x.UserId == changeRoleRequest.Userid)
+                    .Set(x => x.Role, changeRoleRequest.Role)
+                    .Update()
+                    .WaitAsync(cancellationToken);
+                if (response.Content == null || response.Content == "[]")
+                {
+                    return Results.BadRequest();
+                }
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unable to change role");
+                throw new RentMeException(
+                    (int)HttpStatusCode.BadRequest,
+                    "Unable to change role",
+                    ""
+                );
             }
         }
     }

@@ -22,7 +22,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> CreateGuestType(GuestType guestType)
         {
             var result = await _mediator.Send(
@@ -37,6 +37,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpPut]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> UpdateGuestType(GuestType guestType)
         {
             var result = await _mediator.Send(
@@ -51,6 +52,7 @@ namespace WebApi.Controllers.Catalog
         }
 
         [HttpDelete]
+        [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IResult> DeleteGuestType(GuestType guestType)
         {
             var result = await _mediator.Send(
