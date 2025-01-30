@@ -1,9 +1,15 @@
-﻿using MediatR;
+﻿using Application.DTOs;
+using Domain.Common;
+using MediatR;
 
-namespace Application.Services.Catalog.GuestType.Queries.Get
+namespace Application.Services.Catalog.GuestType.Queries.Get;
+
+public class GetGuestTypesQuery : IRequest<Result<IEnumerable<Domain.Entities.Catalogs.GuestType>>>
 {
-    using Domain.Common;
-    using Domain.Entities.Catalogs;
+    public GetGuestTypesQuery(QueryParameters queryParameters)
+    {
+        QueryParameters = queryParameters;
+    }
 
-    public class GetGuestTypesQuery : IRequest<Result<IEnumerable<GuestType>>> { }
+    public QueryParameters QueryParameters { get; set; }
 }

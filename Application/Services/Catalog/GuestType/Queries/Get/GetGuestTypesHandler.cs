@@ -1,51 +1,47 @@
-﻿using MediatR;
+﻿using System.Net;
+using Application.Exceptions;
+using Application.Repositories;
+using Domain.Common;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace Application.Services.Catalog.GuestType.Queries.Get
+namespace Application.Services.Catalog.GuestType.Queries.Get;
+
+public class GetGuestTypesHandler
+    : IRequestHandler<GetGuestTypesQuery, Result<IEnumerable<Domain.Entities.Catalogs.GuestType>>>
 {
-    using System.Net;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Application.Exceptions;
-    using Application.Repositories;
-    using Domain.Common;
-    using Domain.Entities.Catalogs;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<GetGuestTypesHandler> _logger;
+    public readonly IRepository<Domain.Entities.Catalogs.GuestType> _repository;
 
-    public class GetGuestTypesHandler
-        : IRequestHandler<GetGuestTypesQuery, Result<IEnumerable<GuestType>>>
+    public GetGuestTypesHandler(
+        IRepository<Domain.Entities.Catalogs.GuestType> repository,
+        ILogger<GetGuestTypesHandler> logger
+    )
     {
-        public readonly IRepository<GuestType> _repository;
-        private readonly ILogger<GetGuestTypesHandler> _logger;
+        _repository = repository;
+        _logger = logger;
+    }
 
-        public GetGuestTypesHandler(
-            IRepository<GuestType> repository,
-            ILogger<GetGuestTypesHandler> logger
-        )
+    public async Task<Result<IEnumerable<Domain.Entities.Catalogs.GuestType>>> Handle(
+        GetGuestTypesQuery request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
         {
-            _repository = repository;
-            _logger = logger;
+            var guestTypes =
+                await _repository.GetAllWithFiltersAsync(request.QueryParameters);
+
+            return Result<IEnumerable<Domain.Entities.Catalogs.GuestType>>.Success(guestTypes);
         }
-
-        public async Task<Result<IEnumerable<GuestType>>> Handle(
-            GetGuestTypesQuery request,
-            CancellationToken cancellationToken
-        )
+        catch (Exception ex)
         {
-            try
-            {
-                var guestTypes = await _repository.GetAllAsync();
-
-                return Result<IEnumerable<GuestType>>.Success(guestTypes);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unable to get GuestTypes");
-                throw new RentMeException(
-                    ((int)HttpStatusCode.BadRequest),
-                    "Unable to create GuestType",
-                    ""
-                );
-            }
+            _logger.LogError(ex, "Unable to get GuestTypes");
+            throw new RentMeException(
+                (int)HttpStatusCode.BadRequest,
+                "Unable to create GuestType",
+                ""
+            );
         }
     }
 }
