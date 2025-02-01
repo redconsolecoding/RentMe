@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Filter;
 using Application.Repositories;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +42,12 @@ public class Repository<T> : IRepository<T>
         _databaseContext.Set<T>().Update(entity);
     }
 
-    public Task<IEnumerable<T>> GetAllWithFiltersAsync(QueryParameters queryParameters)
+    public async Task<RepositoryResponse<T>> GetAllWithFiltersAsync(QueryParameters queryParameters)
     {
-        throw new NotImplementedException();
+        var query = _databaseContext.Set<T>().AsQueryable();
+        var totalCount = await query.CountAsync();
+        query = query.ApplyFilter(queryParameters.Filters).Skip(queryParameters.Skip).Take(queryParameters.Take);
+        var data = await query.ToListAsync();
+        return new RepositoryResponse<T>(data, totalCount);
     }
 }

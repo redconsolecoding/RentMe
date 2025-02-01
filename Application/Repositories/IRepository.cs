@@ -5,7 +5,7 @@ namespace Application.Repositories;
 public interface IRepository<T>
 {
     public Task<IEnumerable<T>> GetAllAsync();
-    public Task<IEnumerable<T>> GetAllWithFiltersAsync(QueryParameters queryParameters);
+    public Task<RepositoryResponse<T>> GetAllWithFiltersAsync(QueryParameters queryParameters);
 
     public Task<T?> GetById(int id);
 

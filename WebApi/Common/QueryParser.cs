@@ -8,9 +8,10 @@ public static class QueryParser
 {
     public static QueryParameters Parse(string queryString)
     {
+        var uriDecoded = WebUtility.UrlDecode(queryString).Remove(0, 1);
         var parameters = new QueryParameters();
 
-        var queryParts = queryString.Split('&');
+        var queryParts = uriDecoded.Split('&');
         try
         {
             foreach (var queryPart in queryParts)

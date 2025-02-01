@@ -58,14 +58,12 @@ public class GuestTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IResult> GetGuestTypes([FromQuery] string requestQuery)
+    public async Task<IResult> GetGuestTypes()
     {
-        var queryParameters = QueryParser.Parse(requestQuery);
+        var queryParameters = QueryParser.Parse(HttpContext.Request.QueryString.Value ?? string.Empty);
 
-        var result = await _mediator.Send(new GetGuestTypesQuery(queryParameters));
-
-        if (result.IsSuccess) return Results.Ok(result.Value);
-        return Results.BadRequest(result.Error);
+        var response = await _mediator.Send(new GetGuestTypesQuery(queryParameters));
+        return Results.Ok(response);
     }
 
     [HttpGet(":id")]
