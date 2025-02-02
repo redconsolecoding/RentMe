@@ -46,7 +46,8 @@ public class Repository<T> : IRepository<T>
     {
         var query = _databaseContext.Set<T>().AsQueryable();
         var totalCount = await query.CountAsync();
-        query = query.ApplyFilter(queryParameters.Filters).Skip(queryParameters.Skip).Take(queryParameters.Take);
+        query = query.ApplyFilter(queryParameters.Filters).Skip(queryParameters.Skip).Take(queryParameters.Take)
+            .ApplyOrderBy(queryParameters.OrderBy);
         var data = await query.ToListAsync();
         return new RepositoryResponse<T>(data, totalCount);
     }
