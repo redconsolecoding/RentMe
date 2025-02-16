@@ -1,6 +1,4 @@
 using System.Text;
-using Application;
-using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -14,25 +12,21 @@ builder.Host.UseSerilog(
 var url = builder.Configuration["Supabase:ProjectUrl"]!;
 var key = builder.Configuration["Authentication:SupabaseApiKey"]!;
 
-var options = new SupabaseOptions { AutoRefreshToken = true, AutoConnectRealtime = true, };
+var options = new SupabaseOptions { AutoRefreshToken = true, AutoConnectRealtime = true };
 
-builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options));
+builder.Services.AddSingleton(provider => new Client(url, key, options));
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(
         "AdminPolicy",
-        policy =>
-        {
-            policy.RequireClaim("user_role", "admin");
-        }
+        policy => { policy.RequireClaim("user_role", "admin"); }
     );
     options.AddPolicy(
         "ModeratorPolicy",
@@ -58,6 +52,7 @@ builder.Services.AddAuthorization(options =>
         }
     );
 });
+
 
 var bytes = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:JwtSecret"]!);
 
@@ -98,6 +93,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
