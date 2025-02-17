@@ -8,8 +8,11 @@ public static class QueryParser
 {
     public static QueryParameters Parse(string queryString)
     {
-        var uriDecoded = WebUtility.UrlDecode(queryString).Remove(0, 1);
         var parameters = new QueryParameters();
+        if (string.IsNullOrWhiteSpace(queryString))
+            return parameters;
+        
+        var uriDecoded = WebUtility.UrlDecode(queryString).Remove(0, 1);
 
         var queryParts = uriDecoded.Split('&');
         try

@@ -1,4 +1,6 @@
 using System.Text;
+using Application;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -52,7 +54,7 @@ builder.Services.AddAuthorization(options =>
         }
     );
 });
-
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
 var bytes = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:JwtSecret"]!);
 
