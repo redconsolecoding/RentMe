@@ -1,0 +1,33 @@
+services:
+  db:
+    container_name: db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Code.12!
+    ports:
+      - "1433:1433"
+    volumes:
+      - dbdata:/var/opt/mssql
+    networks:
+      - webapi-network
+  
+  webapi:
+    container_name: webapi
+    build:
+      context: ".."
+      dockerfile: "WebApi/Dockerfile"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - webapi-network
+
+
+networks:
+  webapi-network:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local

@@ -1,7 +1,9 @@
 using System.Text;
 using Application;
 using Infrastructure;
+using Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Supabase;
@@ -78,6 +80,21 @@ builder
     });
 
 var app = builder.Build();
+if (app.Environment.IsDevelopment())
+    using (var scope = app.Services.CreateScope())
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            await db.Database.MigrateAsync();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error when applying migrations");
+            throw;
+        }
+    }
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
